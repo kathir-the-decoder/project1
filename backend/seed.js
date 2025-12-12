@@ -1,0 +1,169 @@
+const mongoose = require('mongoose');
+const Tour = require('./models/Tour');
+const User = require('./models/User');
+require('dotenv').config();
+
+const tours = [
+  // EUROPE
+  { name: 'Paris City Explorer', location: 'Paris, France', description: 'Discover the magic of Paris with visits to the Eiffel Tower, Louvre Museum, and charming cafes.', price: 299, duration: '3 days', rating: 4.8, maxGroupSize: 15, image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=500&h=300&fit=crop' },
+  { name: 'Rome Historical Tour', location: 'Rome, Italy', description: 'Walk through ancient history at the Colosseum, Vatican, and Roman Forum.', price: 349, duration: '4 days', rating: 4.8, maxGroupSize: 18, image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=500&h=300&fit=crop' },
+  { name: 'Barcelona Beach & Culture', location: 'Barcelona, Spain', description: 'Enjoy Gaudi architecture, Mediterranean beaches, and vibrant nightlife.', price: 379, duration: '4 days', rating: 4.7, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=500&h=300&fit=crop' },
+  { name: 'London Royal Experience', location: 'London, UK', description: 'Explore Buckingham Palace, Big Ben, Tower of London, and British Museum.', price: 399, duration: '4 days', rating: 4.7, maxGroupSize: 20, image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=500&h=300&fit=crop' },
+  { name: 'Amsterdam Canal Tour', location: 'Amsterdam, Netherlands', description: 'Cruise through canals, visit Van Gogh Museum, and explore tulip gardens.', price: 329, duration: '3 days', rating: 4.6, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=500&h=300&fit=crop' },
+  { name: 'Prague Fairytale', location: 'Prague, Czech Republic', description: 'Discover medieval castles, Charles Bridge, and Old Town Square.', price: 279, duration: '3 days', rating: 4.8, maxGroupSize: 15, image: 'https://images.unsplash.com/photo-1541849546-216549ae216d?w=500&h=300&fit=crop' },
+  { name: 'Vienna Classical', location: 'Vienna, Austria', description: 'Experience classical music, imperial palaces, and Viennese coffee culture.', price: 359, duration: '4 days', rating: 4.7, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=500&h=300&fit=crop' },
+  { name: 'Iceland Northern Lights', location: 'Reykjavik, Iceland', description: 'Chase the Northern Lights, explore glaciers, and relax in hot springs.', price: 799, duration: '7 days', rating: 5.0, maxGroupSize: 8, image: 'https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=500&h=300&fit=crop' },
+  { name: 'Swiss Alps Adventure', location: 'Zurich, Switzerland', description: 'Scenic train rides, mountain hiking, and chocolate tasting in the Alps.', price: 699, duration: '5 days', rating: 4.9, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=500&h=300&fit=crop' },
+  { name: 'Greek Islands Hopping', location: 'Santorini, Greece', description: 'Island hop through Santorini, Mykonos, and Crete with stunning sunsets.', price: 549, duration: '6 days', rating: 4.9, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=500&h=300&fit=crop' },
+  { name: 'Berlin History Tour', location: 'Berlin, Germany', description: 'Explore the Berlin Wall, Brandenburg Gate, and vibrant art scene.', price: 319, duration: '4 days', rating: 4.6, maxGroupSize: 18, image: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?w=500&h=300&fit=crop' },
+  { name: 'Lisbon Coastal Charm', location: 'Lisbon, Portugal', description: 'Ride vintage trams, taste pastéis de nata, and explore Sintra palaces.', price: 299, duration: '4 days', rating: 4.7, maxGroupSize: 15, image: 'https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=500&h=300&fit=crop' },
+  { name: 'Dublin Irish Experience', location: 'Dublin, Ireland', description: 'Visit Guinness Storehouse, explore castles, and enjoy traditional pubs.', price: 349, duration: '4 days', rating: 4.6, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1549918864-48ac978761a4?w=500&h=300&fit=crop' },
+  { name: 'Scottish Highlands', location: 'Edinburgh, Scotland', description: 'Explore Edinburgh Castle, Loch Ness, and dramatic Highland landscapes.', price: 449, duration: '5 days', rating: 4.8, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1506377585622-bedcbb5f7b66?w=500&h=300&fit=crop' },
+  { name: 'Norwegian Fjords', location: 'Bergen, Norway', description: 'Cruise through majestic fjords and experience stunning Nordic nature.', price: 749, duration: '6 days', rating: 4.9, maxGroupSize: 10, image: 'https://images.unsplash.com/photo-1520769669658-f07657f5a307?w=500&h=300&fit=crop' },
+  { name: 'Stockholm Archipelago', location: 'Stockholm, Sweden', description: 'Explore the beautiful archipelago, Gamla Stan, and Nordic design.', price: 429, duration: '4 days', rating: 4.7, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1509356843151-3e7d96241e11?w=500&h=300&fit=crop' },
+  { name: 'Copenhagen Hygge', location: 'Copenhagen, Denmark', description: 'Experience Danish hygge, Tivoli Gardens, and colorful Nyhavn.', price: 399, duration: '3 days', rating: 4.6, maxGroupSize: 15, image: 'https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?w=500&h=300&fit=crop' },
+  { name: 'Budapest Thermal Baths', location: 'Budapest, Hungary', description: 'Relax in thermal baths, explore Buda Castle, and cruise the Danube.', price: 289, duration: '4 days', rating: 4.7, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1551867633-194f125bddfa?w=500&h=300&fit=crop' },
+  { name: 'Croatian Coast', location: 'Dubrovnik, Croatia', description: 'Walk the ancient walls, visit Game of Thrones locations, and island hop.', price: 479, duration: '5 days', rating: 4.8, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1555990538-1e6c89d0e1b5?w=500&h=300&fit=crop' },
+  { name: 'Finnish Lapland', location: 'Rovaniemi, Finland', description: 'Meet Santa Claus, see Northern Lights, and experience Arctic wilderness.', price: 699, duration: '5 days', rating: 4.9, maxGroupSize: 10, image: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=500&h=300&fit=crop' },
+
+  // ASIA
+  { name: 'Tokyo Adventure', location: 'Tokyo, Japan', description: 'Experience traditional temples, modern technology, and incredible cuisine.', price: 599, duration: '5 days', rating: 4.9, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=500&h=300&fit=crop' },
+  { name: 'Bali Paradise', location: 'Bali, Indonesia', description: 'Relax on beautiful beaches, visit ancient temples, and enjoy tropical paradise.', price: 449, duration: '6 days', rating: 4.9, maxGroupSize: 10, image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&h=300&fit=crop' },
+  { name: 'Dubai Luxury Experience', location: 'Dubai, UAE', description: 'Experience luxury shopping, desert safaris, and the world\'s tallest building.', price: 699, duration: '5 days', rating: 4.6, maxGroupSize: 15, image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=500&h=300&fit=crop' },
+  { name: 'Thailand Beach Escape', location: 'Phuket, Thailand', description: 'Crystal clear waters, Thai cuisine, and island hopping adventures.', price: 399, duration: '6 days', rating: 4.7, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=500&h=300&fit=crop' },
+  { name: 'Singapore City Wonder', location: 'Singapore', description: 'Gardens by the Bay, Marina Bay Sands, and world-class street food.', price: 499, duration: '4 days', rating: 4.8, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=500&h=300&fit=crop' },
+  { name: 'Vietnam Heritage', location: 'Hanoi, Vietnam', description: 'Ha Long Bay cruise, ancient temples, and authentic Vietnamese cuisine.', price: 379, duration: '7 days', rating: 4.7, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1557750255-c76072a7aad1?w=500&h=300&fit=crop' },
+  { name: 'Maldives Luxury Resort', location: 'Maldives', description: 'Overwater villas, pristine beaches, and world-class diving.', price: 1299, duration: '5 days', rating: 5.0, maxGroupSize: 6, image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=500&h=300&fit=crop' },
+  { name: 'Hong Kong Discovery', location: 'Hong Kong', description: 'Victoria Peak, dim sum, and the stunning city skyline.', price: 449, duration: '4 days', rating: 4.6, maxGroupSize: 18, image: 'https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=500&h=300&fit=crop' },
+  { name: 'South Korea Culture', location: 'Seoul, South Korea', description: 'K-pop culture, ancient palaces, and Korean BBQ experience.', price: 479, duration: '5 days', rating: 4.8, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1538485399081-7191377e8241?w=500&h=300&fit=crop' },
+  { name: 'China Great Wall', location: 'Beijing, China', description: 'Walk the Great Wall, explore Forbidden City, and taste Peking duck.', price: 549, duration: '6 days', rating: 4.7, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=500&h=300&fit=crop' },
+  { name: 'Cambodia Temples', location: 'Siem Reap, Cambodia', description: 'Explore Angkor Wat, ancient temples, and Khmer heritage.', price: 349, duration: '5 days', rating: 4.8, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=500&h=300&fit=crop' },
+  { name: 'Malaysia Adventure', location: 'Kuala Lumpur, Malaysia', description: 'Petronas Towers, Batu Caves, and diverse Malaysian cuisine.', price: 379, duration: '5 days', rating: 4.6, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=500&h=300&fit=crop' },
+  { name: 'Philippines Island Paradise', location: 'Palawan, Philippines', description: 'El Nido lagoons, underground rivers, and pristine beaches.', price: 429, duration: '6 days', rating: 4.8, maxGroupSize: 10, image: 'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=500&h=300&fit=crop' },
+  { name: 'Sri Lanka Heritage', location: 'Colombo, Sri Lanka', description: 'Ancient temples, tea plantations, and wildlife safaris.', price: 399, duration: '7 days', rating: 4.7, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1586613835341-b5901bf5e6e0?w=500&h=300&fit=crop' },
+  { name: 'Nepal Himalayan Trek', location: 'Kathmandu, Nepal', description: 'Everest base camp trek, Buddhist monasteries, and mountain views.', price: 649, duration: '10 days', rating: 4.9, maxGroupSize: 8, image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=500&h=300&fit=crop' },
+
+  // INDIA
+  { name: 'Golden Triangle India', location: 'Delhi, India', description: 'Taj Mahal, Jaipur palaces, and Delhi heritage sites.', price: 449, duration: '7 days', rating: 4.8, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=500&h=300&fit=crop' },
+  { name: 'Kerala Backwaters', location: 'Kochi, India', description: 'Houseboat cruise, Ayurvedic spa, and tropical landscapes.', price: 399, duration: '6 days', rating: 4.7, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=500&h=300&fit=crop' },
+  { name: 'Rajasthan Royal Tour', location: 'Jaipur, India', description: 'Majestic forts, desert safaris, and royal heritage.', price: 479, duration: '8 days', rating: 4.8, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=500&h=300&fit=crop' },
+  { name: 'Goa Beach Holiday', location: 'Goa, India', description: 'Beautiful beaches, Portuguese heritage, and vibrant nightlife.', price: 299, duration: '5 days', rating: 4.5, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=500&h=300&fit=crop' },
+  { name: 'Varanasi Spiritual Journey', location: 'Varanasi, India', description: 'Sacred Ganges, ancient temples, and spiritual ceremonies.', price: 349, duration: '4 days', rating: 4.7, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=500&h=300&fit=crop' },
+
+  // AMERICAS
+  { name: 'New York City Highlights', location: 'New York, USA', description: 'Times Square, Central Park, Statue of Liberty, and Broadway shows.', price: 399, duration: '4 days', rating: 4.7, maxGroupSize: 20, image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=500&h=300&fit=crop' },
+  { name: 'Grand Canyon Adventure', location: 'Arizona, USA', description: 'Breathtaking canyon views, hiking trails, and helicopter tours.', price: 549, duration: '4 days', rating: 4.9, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=500&h=300&fit=crop' },
+  { name: 'Las Vegas Entertainment', location: 'Las Vegas, USA', description: 'World-class shows, casinos, and desert excursions.', price: 449, duration: '4 days', rating: 4.5, maxGroupSize: 18, image: 'https://images.unsplash.com/photo-1605833556294-ea5c7a74f57d?w=500&h=300&fit=crop' },
+  { name: 'Hawaii Paradise', location: 'Honolulu, USA', description: 'Tropical beaches, volcanoes, and authentic luau experience.', price: 799, duration: '7 days', rating: 4.9, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1507876466758-bc54f384809c?w=500&h=300&fit=crop' },
+  { name: 'San Francisco Bay', location: 'San Francisco, USA', description: 'Golden Gate Bridge, Alcatraz, and cable car rides.', price: 429, duration: '4 days', rating: 4.7, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=500&h=300&fit=crop' },
+  { name: 'Miami Beach Vibes', location: 'Miami, USA', description: 'Art Deco architecture, South Beach, and Cuban cuisine.', price: 379, duration: '4 days', rating: 4.6, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?w=500&h=300&fit=crop' },
+  { name: 'Canadian Rockies', location: 'Banff, Canada', description: 'Stunning mountain scenery, Lake Louise, and wildlife spotting.', price: 649, duration: '6 days', rating: 4.9, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=500&h=300&fit=crop' },
+  { name: 'Vancouver Island', location: 'Vancouver, Canada', description: 'Whale watching, rainforests, and Pacific Northwest beauty.', price: 549, duration: '5 days', rating: 4.8, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1559511260-66a68e7e7e8c?w=500&h=300&fit=crop' },
+  { name: 'Mexico City Culture', location: 'Mexico City, Mexico', description: 'Aztec ruins, vibrant markets, and authentic Mexican cuisine.', price: 349, duration: '5 days', rating: 4.6, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1518659526054-190340b32735?w=500&h=300&fit=crop' },
+  { name: 'Cancun Beach Resort', location: 'Cancun, Mexico', description: 'Caribbean beaches, Mayan ruins, and all-inclusive resorts.', price: 499, duration: '6 days', rating: 4.7, maxGroupSize: 18, image: 'https://images.unsplash.com/photo-1552074284-5e88ef1aef18?w=500&h=300&fit=crop' },
+  { name: 'Costa Rica Rainforest', location: 'San Jose, Costa Rica', description: 'Zip-lining, wildlife, and volcanic hot springs.', price: 549, duration: '7 days', rating: 4.8, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1518182170546-07661fd94144?w=500&h=300&fit=crop' },
+  { name: 'Peru Machu Picchu', location: 'Cusco, Peru', description: 'Ancient Incan citadel, Sacred Valley, and Andean culture.', price: 699, duration: '8 days', rating: 4.9, maxGroupSize: 10, image: 'https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=500&h=300&fit=crop' },
+  { name: 'Brazil Rio Carnival', location: 'Rio de Janeiro, Brazil', description: 'Christ the Redeemer, Copacabana Beach, and samba culture.', price: 599, duration: '6 days', rating: 4.7, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=500&h=300&fit=crop' },
+  { name: 'Argentina Patagonia', location: 'Buenos Aires, Argentina', description: 'Glaciers, tango shows, and world-class steakhouses.', price: 749, duration: '8 days', rating: 4.8, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1464817739973-0128fe77aaa1?w=500&h=300&fit=crop' },
+  { name: 'Chile Wine Country', location: 'Santiago, Chile', description: 'Vineyard tours, Andes mountains, and Chilean cuisine.', price: 549, duration: '6 days', rating: 4.6, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=500&h=300&fit=crop' },
+  { name: 'Colombia Coffee Trail', location: 'Bogota, Colombia', description: 'Coffee plantations, colorful streets, and Caribbean coast.', price: 449, duration: '7 days', rating: 4.7, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1518638150340-f706e86654de?w=500&h=300&fit=crop' },
+  { name: 'Ecuador Galapagos', location: 'Quito, Ecuador', description: 'Unique wildlife, volcanic islands, and Darwin\'s paradise.', price: 1199, duration: '8 days', rating: 5.0, maxGroupSize: 8, image: 'https://images.unsplash.com/photo-1544979590-37e9b47eb705?w=500&h=300&fit=crop' },
+  { name: 'Cuba Havana Nights', location: 'Havana, Cuba', description: 'Classic cars, salsa dancing, and colonial architecture.', price: 499, duration: '5 days', rating: 4.6, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1500759285222-a95626b934cb?w=500&h=300&fit=crop' },
+  { name: 'Jamaica Reggae', location: 'Montego Bay, Jamaica', description: 'Bob Marley heritage, jerk cuisine, and Caribbean beaches.', price: 449, duration: '5 days', rating: 4.5, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1580237072617-771c3ecc4a24?w=500&h=300&fit=crop' },
+  { name: 'Alaska Wilderness', location: 'Anchorage, USA', description: 'Glaciers, wildlife, and Northern Lights viewing.', price: 899, duration: '7 days', rating: 4.9, maxGroupSize: 10, image: 'https://images.unsplash.com/photo-1531176175280-33e79b7f0e1c?w=500&h=300&fit=crop' },
+
+  // AFRICA
+  { name: 'Kenya Safari', location: 'Nairobi, Kenya', description: 'Big Five safari, Masai Mara, and African sunsets.', price: 899, duration: '7 days', rating: 4.9, maxGroupSize: 10, image: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=500&h=300&fit=crop' },
+  { name: 'South Africa Adventure', location: 'Cape Town, South Africa', description: 'Table Mountain, wine country, and coastal drives.', price: 749, duration: '8 days', rating: 4.8, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=500&h=300&fit=crop' },
+  { name: 'Morocco Desert', location: 'Marrakech, Morocco', description: 'Sahara camping, ancient medinas, and Berber culture.', price: 549, duration: '6 days', rating: 4.7, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?w=500&h=300&fit=crop' },
+  { name: 'Egypt Pyramids', location: 'Cairo, Egypt', description: 'Great Pyramids, Sphinx, and Nile River cruise.', price: 649, duration: '7 days', rating: 4.8, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=500&h=300&fit=crop' },
+  { name: 'Tanzania Serengeti', location: 'Arusha, Tanzania', description: 'Great Migration, Ngorongoro Crater, and Kilimanjaro views.', price: 999, duration: '8 days', rating: 4.9, maxGroupSize: 10, image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=500&h=300&fit=crop' },
+  { name: 'Victoria Falls', location: 'Livingstone, Zambia', description: 'Majestic waterfalls, bungee jumping, and river safaris.', price: 699, duration: '5 days', rating: 4.8, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1568625502763-2a5ec6a94c47?w=500&h=300&fit=crop' },
+  { name: 'Rwanda Gorilla Trek', location: 'Kigali, Rwanda', description: 'Mountain gorilla encounters and rainforest exploration.', price: 1499, duration: '5 days', rating: 5.0, maxGroupSize: 6, image: 'https://images.unsplash.com/photo-1521651201144-634f700b36ef?w=500&h=300&fit=crop' },
+  { name: 'Mauritius Beach', location: 'Port Louis, Mauritius', description: 'Turquoise lagoons, luxury resorts, and water sports.', price: 799, duration: '6 days', rating: 4.7, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?w=500&h=300&fit=crop' },
+  { name: 'Seychelles Paradise', location: 'Victoria, Seychelles', description: 'Pristine beaches, giant tortoises, and island hopping.', price: 1099, duration: '6 days', rating: 4.9, maxGroupSize: 10, image: 'https://images.unsplash.com/photo-1589979481223-deb893043163?w=500&h=300&fit=crop' },
+  { name: 'Tunisia Ancient', location: 'Tunis, Tunisia', description: 'Carthage ruins, Sahara desert, and Mediterranean coast.', price: 449, duration: '6 days', rating: 4.5, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=500&h=300&fit=crop' },
+
+  // OCEANIA
+  { name: 'Sydney Harbour', location: 'Sydney, Australia', description: 'Opera House, Harbour Bridge, and Bondi Beach.', price: 599, duration: '5 days', rating: 4.8, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=500&h=300&fit=crop' },
+  { name: 'Great Barrier Reef', location: 'Cairns, Australia', description: 'World\'s largest coral reef, snorkeling, and diving.', price: 799, duration: '6 days', rating: 4.9, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=500&h=300&fit=crop' },
+  { name: 'New Zealand Adventure', location: 'Auckland, New Zealand', description: 'Hobbiton, fjords, and extreme sports paradise.', price: 899, duration: '8 days', rating: 4.9, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=500&h=300&fit=crop' },
+  { name: 'Fiji Island Escape', location: 'Nadi, Fiji', description: 'Tropical islands, coral reefs, and Fijian hospitality.', price: 749, duration: '6 days', rating: 4.7, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=500&h=300&fit=crop' },
+  { name: 'Melbourne Culture', location: 'Melbourne, Australia', description: 'Street art, coffee culture, and Great Ocean Road.', price: 549, duration: '5 days', rating: 4.7, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1514395462725-fb4566210144?w=500&h=300&fit=crop' },
+  { name: 'Tahiti French Polynesia', location: 'Papeete, Tahiti', description: 'Overwater bungalows, lagoons, and Polynesian culture.', price: 1199, duration: '7 days', rating: 4.9, maxGroupSize: 8, image: 'https://images.unsplash.com/photo-1516815231560-8f41ec531527?w=500&h=300&fit=crop' },
+  { name: 'Tasmania Wilderness', location: 'Hobart, Australia', description: 'Pristine wilderness, unique wildlife, and gourmet food.', price: 649, duration: '6 days', rating: 4.6, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=300&fit=crop' },
+  { name: 'Queenstown Thrill', location: 'Queenstown, New Zealand', description: 'Bungee jumping, skiing, and stunning lake views.', price: 749, duration: '5 days', rating: 4.8, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1589871973318-9ca1258faa5d?w=500&h=300&fit=crop' },
+  { name: 'Samoa Traditional', location: 'Apia, Samoa', description: 'Traditional villages, waterfalls, and Pacific culture.', price: 599, duration: '5 days', rating: 4.5, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&h=300&fit=crop' },
+  { name: 'Papua New Guinea', location: 'Port Moresby, PNG', description: 'Tribal cultures, diving, and untouched wilderness.', price: 899, duration: '7 days', rating: 4.6, maxGroupSize: 10, image: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=500&h=300&fit=crop' },
+
+  // MIDDLE EAST
+  { name: 'Jordan Petra', location: 'Amman, Jordan', description: 'Ancient Petra, Dead Sea, and Wadi Rum desert.', price: 599, duration: '6 days', rating: 4.8, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1579606032821-4e6161c81571?w=500&h=300&fit=crop' },
+  { name: 'Israel Holy Land', location: 'Tel Aviv, Israel', description: 'Jerusalem, Dead Sea, and ancient biblical sites.', price: 699, duration: '7 days', rating: 4.7, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1544967082-d9d25d867d66?w=500&h=300&fit=crop' },
+  { name: 'Oman Desert', location: 'Muscat, Oman', description: 'Wadis, forts, and authentic Arabian hospitality.', price: 549, duration: '5 days', rating: 4.6, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1559564484-e48b3e040ff4?w=500&h=300&fit=crop' },
+  { name: 'Abu Dhabi Luxury', location: 'Abu Dhabi, UAE', description: 'Sheikh Zayed Mosque, Ferrari World, and desert dunes.', price: 649, duration: '4 days', rating: 4.7, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=500&h=300&fit=crop' },
+  { name: 'Qatar Modern', location: 'Doha, Qatar', description: 'Futuristic architecture, souqs, and desert adventures.', price: 549, duration: '4 days', rating: 4.5, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1559564484-e48b3e040ff4?w=500&h=300&fit=crop' },
+
+  // MORE DESTINATIONS
+  { name: 'Kyoto Traditional Japan', location: 'Kyoto, Japan', description: 'Ancient temples, geisha districts, and bamboo forests.', price: 649, duration: '5 days', rating: 4.9, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=500&h=300&fit=crop' },
+  { name: 'Venice Romance', location: 'Venice, Italy', description: 'Gondola rides, St. Mark\'s Square, and Italian cuisine.', price: 449, duration: '4 days', rating: 4.8, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=500&h=300&fit=crop' },
+  { name: 'Florence Art Tour', location: 'Florence, Italy', description: 'Renaissance art, Uffizi Gallery, and Tuscan wine.', price: 479, duration: '4 days', rating: 4.8, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1543429258-c5ca3cb6d104?w=500&h=300&fit=crop' },
+  { name: 'Amalfi Coast', location: 'Naples, Italy', description: 'Stunning coastline, Positano, and Mediterranean charm.', price: 549, duration: '5 days', rating: 4.9, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1534113414509-0eec2bfb493f?w=500&h=300&fit=crop' },
+  { name: 'Munich Oktoberfest', location: 'Munich, Germany', description: 'Bavarian culture, beer gardens, and Alpine day trips.', price: 399, duration: '4 days', rating: 4.6, maxGroupSize: 18, image: 'https://images.unsplash.com/photo-1595867818082-083862f3d630?w=500&h=300&fit=crop' },
+  { name: 'Bruges Medieval', location: 'Bruges, Belgium', description: 'Chocolate, canals, and medieval architecture.', price: 329, duration: '3 days', rating: 4.7, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1491557345352-5929e343eb89?w=500&h=300&fit=crop' },
+  { name: 'Cinque Terre Hike', location: 'La Spezia, Italy', description: 'Colorful villages, coastal trails, and fresh seafood.', price: 449, duration: '4 days', rating: 4.8, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1499678329028-101435549a4e?w=500&h=300&fit=crop' },
+  { name: 'Provence Lavender', location: 'Nice, France', description: 'Lavender fields, French Riviera, and wine tasting.', price: 499, duration: '5 days', rating: 4.7, maxGroupSize: 14, image: 'https://images.unsplash.com/photo-1499002238440-d264edd596ec?w=500&h=300&fit=crop' },
+  { name: 'Salzburg Mozart', location: 'Salzburg, Austria', description: 'Sound of Music locations, Mozart heritage, and Alpine views.', price: 379, duration: '3 days', rating: 4.6, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1595867818082-083862f3d630?w=500&h=300&fit=crop' },
+  { name: 'Krakow History', location: 'Krakow, Poland', description: 'Old Town, salt mines, and Auschwitz memorial.', price: 299, duration: '4 days', rating: 4.7, maxGroupSize: 16, image: 'https://images.unsplash.com/photo-1519197924294-4ba991a11128?w=500&h=300&fit=crop' },
+  { name: 'Chiang Mai Temples', location: 'Chiang Mai, Thailand', description: 'Buddhist temples, elephant sanctuaries, and night markets.', price: 349, duration: '5 days', rating: 4.7, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1528181304800-259b08848526?w=500&h=300&fit=crop' },
+  { name: 'Zanzibar Spice Island', location: 'Stone Town, Tanzania', description: 'Spice tours, pristine beaches, and Swahili culture.', price: 549, duration: '6 days', rating: 4.6, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=500&h=300&fit=crop' },
+  { name: 'Bhutan Happiness', location: 'Thimphu, Bhutan', description: 'Tiger\'s Nest monastery, Himalayan culture, and happiness.', price: 999, duration: '7 days', rating: 4.9, maxGroupSize: 8, image: 'https://images.unsplash.com/photo-1553856622-d1b352e24a82?w=500&h=300&fit=crop' },
+  { name: 'Uzbekistan Silk Road', location: 'Samarkand, Uzbekistan', description: 'Ancient Silk Road cities, Islamic architecture, and bazaars.', price: 599, duration: '8 days', rating: 4.7, maxGroupSize: 12, image: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?w=500&h=300&fit=crop' },
+  { name: 'Madagascar Wildlife', location: 'Antananarivo, Madagascar', description: 'Lemurs, baobab trees, and unique biodiversity.', price: 899, duration: '9 days', rating: 4.8, maxGroupSize: 10, image: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=500&h=300&fit=crop' },
+];
+
+const seedDatabase = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tour-app');
+    console.log('Connected to MongoDB');
+
+    // Clear existing data
+    await Tour.deleteMany({});
+    await User.deleteMany({});
+    console.log('Cleared existing data');
+
+    // Seed tours
+    await Tour.insertMany(tours);
+    console.log(`✅ ${tours.length} Tours seeded successfully`);
+
+    // Create admin user
+    await User.create({
+      name: 'Admin User',
+      email: 'admin@tourexplorer.com',
+      password: 'admin123',
+      role: 'admin',
+    });
+    console.log('✅ Admin user created (admin@tourexplorer.com / admin123)');
+
+    // Create regular user
+    await User.create({
+      name: 'Test User',
+      email: 'user@example.com',
+      password: 'user123',
+      role: 'user',
+    });
+    console.log('✅ Test user created (user@example.com / user123)');
+
+    console.log('\n✅ Database seeded successfully!');
+    console.log(`\n📍 Total Tours: ${tours.length}`);
+    console.log('\nLogin Credentials:');
+    console.log('Admin: admin@tourexplorer.com / admin123');
+    console.log('User: user@example.com / user123\n');
+
+    process.exit(0);
+  } catch (error) {
+    console.error('❌ Error seeding database:', error);
+    process.exit(1);
+  }
+};
+
+seedDatabase();

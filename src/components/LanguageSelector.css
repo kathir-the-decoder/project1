@@ -1,0 +1,50 @@
+.language-selector {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.lang-select,
+.currency-select {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.lang-select:hover,
+.currency-select:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.lang-select:focus,
+.currency-select:focus {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: white;
+}
+
+.lang-select option,
+.currency-select option {
+  background: #333;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .language-selector {
+    gap: 0.25rem;
+  }
+
+  .lang-select,
+  .currency-select {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.85rem;
+  }
+}
