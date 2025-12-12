@@ -75,54 +75,109 @@ export const getBooking = async (id) => {
   }
 };
 
+// Helper function to get registered users from localStorage
+const getRegisteredUsers = () => {
+  try {
+    const users = localStorage.getItem('registeredUsers');
+    return users ? JSON.parse(users) : [];
+  } catch {
+    return [];
+  }
+};
+
+// Helper function to save user to localStorage
+const saveRegisteredUser = (user, password) => {
+  const users = getRegisteredUsers();
+  // Check if user already exists
+  const existingIndex = users.findIndex(u => u.email === user.email);
+  if (existingIndex >= 0) {
+    users[existingIndex] = { ...user, password };
+  } else {
+    users.push({ ...user, password });
+  }
+  localStorage.setItem('registeredUsers', JSON.stringify(users));
+};
+
 // Users
 export const register = async (userData) => {
+  // Check if email already exists
+  const existingUsers = getRegisteredUsers();
+  if (existingUsers.find(u => u.email === userData.email)) {
+    throw new Error('Email already registered');
+  }
+
+  // Try backend first
   try {
     const response = await api.post('/users/register', userData);
+    // Save to localStorage as backup
+    saveRegisteredUser(response.data.user, userData.password);
     return response.data;
   } catch (error) {
-    // Demo mode
+    // Demo mode - save to localStorage
+    console.log('Backend unavailable, saving user locally');
+    const newUser = {
+      _id: 'user-' + Date.now(),
+      name: userData.name,
+      email: userData.email,
+      role: 'user'
+    };
+    
+    // Save user with password to localStorage
+    saveRegisteredUser(newUser, userData.password);
+    
     return {
-      user: {
-        _id: 'demo-user-' + Date.now(),
-        name: userData.name,
-        email: userData.email,
-        role: 'user'
-      },
-      token: 'demo-token-' + Date.now()
+      user: newUser,
+      token: 'token-' + Date.now()
     };
   }
 };
 
 export const login = async (credentials) => {
+  // First check demo credentials (works without backend)
+  if (credentials.email === 'admin@tourexplorer.com' && credentials.password === 'admin123') {
+    return {
+      user: {
+        _id: 'demo-admin',
+        name: 'Admin User',
+        email: 'admin@tourexplorer.com',
+        role: 'admin'
+      },
+      token: 'demo-admin-token'
+    };
+  }
+  if (credentials.email === 'user@example.com' && credentials.password === 'user123') {
+    return {
+      user: {
+        _id: 'demo-user',
+        name: 'Demo User',
+        email: 'user@example.com',
+        role: 'user'
+      },
+      token: 'demo-user-token'
+    };
+  }
+  
+  // Check localStorage for registered users
+  const registeredUsers = getRegisteredUsers();
+  const localUser = registeredUsers.find(
+    u => u.email === credentials.email && u.password === credentials.password
+  );
+  
+  if (localUser) {
+    // Return user without password
+    const { password, ...userWithoutPassword } = localUser;
+    return {
+      user: userWithoutPassword,
+      token: 'local-token-' + Date.now()
+    };
+  }
+  
+  // Try backend if not found locally
   try {
     const response = await api.post('/users/login', credentials);
     return response.data;
   } catch (error) {
-    // Demo mode - check demo credentials
-    if (credentials.email === 'admin@tourexplorer.com' && credentials.password === 'admin123') {
-      return {
-        user: {
-          _id: 'demo-admin',
-          name: 'Admin User',
-          email: 'admin@tourexplorer.com',
-          role: 'admin'
-        },
-        token: 'demo-admin-token'
-      };
-    }
-    if (credentials.email === 'user@example.com' && credentials.password === 'user123') {
-      return {
-        user: {
-          _id: 'demo-user',
-          name: 'Demo User',
-          email: 'user@example.com',
-          role: 'user'
-        },
-        token: 'demo-user-token'
-      };
-    }
-    throw new Error('Invalid credentials');
+    throw new Error('Invalid email or password');
   }
 };
 
