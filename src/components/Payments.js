@@ -3,7 +3,7 @@ import './Payments.css';
 import { useLanguage } from '../context/LanguageContext';
 
 function Payments({ user, onClose }) {
-  const { t, formatPrice } = useLanguage();
+  const { t } = useLanguage();
   const [showAddCard, setShowAddCard] = useState(false);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [transactions, setTransactions] = useState([]);

@@ -8,39 +8,29 @@ function MyBookings({ user, onClose }) {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
+    const loadBookings = async () => {
+      try {
+        const response = await getBookings();
+        const allBookings = response.data || [];
+        const userBookings = allBookings.filter(b => b.email === user?.email);
+        const savedBookings = localStorage.getItem(`bookings_${user?.email}`);
+        const localBookings = savedBookings ? JSON.parse(savedBookings) : [];
+        const merged = [...userBookings];
+        localBookings.forEach(lb => {
+          if (!merged.find(b => b.bookingId === lb.bookingId || b._id === lb.bookingId)) {
+            merged.push(lb);
+          }
+        });
+        setBookings(merged);
+      } catch (error) {
+        const savedBookings = localStorage.getItem(`bookings_${user?.email}`);
+        if (savedBookings) {
+          setBookings(JSON.parse(savedBookings));
+        }
+      }
+    };
     loadBookings();
   }, [user]);
-
-  const loadBookings = async () => {
-    // Get bookings from API/localStorage
-    try {
-      const response = await getBookings();
-      const allBookings = response.data || [];
-      
-      // Filter bookings for current user
-      const userBookings = allBookings.filter(b => b.email === user?.email);
-      
-      // Also get from user-specific localStorage
-      const savedBookings = localStorage.getItem(`bookings_${user?.email}`);
-      const localBookings = savedBookings ? JSON.parse(savedBookings) : [];
-      
-      // Merge and deduplicate
-      const merged = [...userBookings];
-      localBookings.forEach(lb => {
-        if (!merged.find(b => b.bookingId === lb.bookingId || b._id === lb.bookingId)) {
-          merged.push(lb);
-        }
-      });
-      
-      setBookings(merged);
-    } catch (error) {
-      // Fallback to localStorage only
-      const savedBookings = localStorage.getItem(`bookings_${user?.email}`);
-      if (savedBookings) {
-        setBookings(JSON.parse(savedBookings));
-      }
-    }
-  };
 
   const getBookingStatus = (booking) => {
     // Check admin status first

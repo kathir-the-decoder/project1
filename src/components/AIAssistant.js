@@ -3,6 +3,7 @@ import './AIAssistant.css';
 import { useLanguage } from '../context/LanguageContext';
 
 function AIAssistant({ tours, onSelectTour }) {
+  // eslint-disable-next-line no-unused-vars
   const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([

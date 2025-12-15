@@ -205,7 +205,8 @@ export const login = async (credentials) => {
 export const createEnquiry = async (enquiryData) => {
   // Web3Forms API key - Get free key at https://web3forms.com/
   const WEB3FORMS_KEY = 'YOUR_ACCESS_KEY_HERE'; // Replace with your Web3Forms access key
-  const ADMIN_EMAIL = 'admin@tourexplorer.com'; // Replace with your admin email
+  // Admin email for notifications (used when Web3Forms is configured)
+  // const ADMIN_EMAIL = 'admin@tourexplorer.com';
 
   const enquiryContent = `
 NEW ENQUIRY FROM TOUR EXPLORER WEBSITE

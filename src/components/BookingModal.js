@@ -26,7 +26,7 @@ function BookingModal({ tour, onClose, onConfirm }) {
     specialRequests: '',
   });
 
-  const addOns = {
+  const addOns = useMemo(() => ({
     roomTypes: [
       { id: 'standard', name: t('standardRoom') || 'Standard Room', price: 0 },
       { id: 'deluxe', name: t('deluxeRoom') || 'Deluxe Room', price: 50 },
@@ -59,7 +59,7 @@ function BookingModal({ tour, onClose, onConfirm }) {
       { id: 'sunset', name: t('sunsetCruise') || 'Sunset Cruise', price: 55, icon: '🌅' },
       { id: 'wildlife', name: t('wildlifeSafari') || 'Wildlife Safari', price: 70, icon: '🦁' },
     ],
-  };
+  }), [t]);
 
   const calculateTotal = useMemo(() => {
     let total = tour.price * formData.guests;
@@ -73,7 +73,7 @@ function BookingModal({ tour, onClose, onConfirm }) {
     if (meal) total += meal.price * formData.guests;
     
     // Transport
-    const transport = addOns.transportOptions.find(t => t.id === customizations.transport);
+    const transport = addOns.transportOptions.find(tr => tr.id === customizations.transport);
     if (transport) total += transport.price;
     
     // Extras

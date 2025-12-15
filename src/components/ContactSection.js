@@ -69,10 +69,10 @@ function ContactSection() {
           </div>
 
           <div className="social-links">
-            <a href="#" className="social-btn">📘 Facebook</a>
-            <a href="#" className="social-btn">📸 Instagram</a>
-            <a href="#" className="social-btn">🐦 Twitter</a>
-            <a href="#" className="social-btn">▶️ YouTube</a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-btn">📘 Facebook</a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-btn">📸 Instagram</a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-btn">🐦 Twitter</a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="social-btn">▶️ YouTube</a>
           </div>
         </div>
 

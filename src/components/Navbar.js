@@ -3,7 +3,7 @@ import './Navbar.css';
 import { useLanguage } from '../context/LanguageContext';
 
 function Navbar({ user, onLogout, onLoginClick, onSettingsClick, onProfileClick, onMyBookingsClick, onPaymentsClick }) {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
