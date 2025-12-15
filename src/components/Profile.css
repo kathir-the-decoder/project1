@@ -250,27 +250,115 @@
 }
 
 @media (max-width: 480px) {
+  .profile-overlay {
+    padding: 0.5rem;
+    align-items: flex-end;
+  }
+
   .profile-modal {
-    width: 95%;
-    margin: 10px;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .profile-close {
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
   }
 
   .profile-stats {
     gap: 1rem;
+    padding: 15px;
+  }
+
+  .stat-value {
+    font-size: 1.3rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
   }
 
   .profile-avatar-large {
-    width: 80px;
-    height: 80px;
-    font-size: 2rem;
+    width: 75px;
+    height: 75px;
+    font-size: 1.8rem;
   }
 
   .profile-banner {
-    height: 100px;
+    height: 90px;
   }
 
   .profile-info {
-    padding-top: 50px;
+    padding: 45px 15px 15px;
+  }
+
+  .profile-name {
+    font-size: 1.4rem;
+  }
+
+  .profile-email {
+    font-size: 0.85rem;
+  }
+
+  .profile-details {
+    padding: 15px;
+  }
+
+  .detail-row {
+    padding: 10px 12px;
+  }
+
+  .detail-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 1.1rem;
+  }
+
+  .detail-value {
+    font-size: 0.9rem;
+  }
+
+  .profile-actions {
+    padding: 15px;
+    flex-direction: column;
+  }
+
+  .profile-btn {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+
+  /* Edit form mobile */
+  .profile-edit-form {
+    padding: 15px;
+  }
+
+  .edit-title {
+    font-size: 1.1rem;
+  }
+
+  .edit-form-group {
+    margin-bottom: 1rem;
+  }
+
+  .edit-form-group input,
+  .edit-form-group textarea {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .edit-actions {
+    flex-direction: column;
+  }
+
+  .edit-btn {
+    padding: 0.8rem;
   }
 }
 

@@ -16,6 +16,7 @@ import Profile from './components/Profile';
 import MyBookings from './components/MyBookings';
 import Payments from './components/Payments';
 import AIAssistant from './components/AIAssistant';
+import BackgroundEffects from './components/BackgroundEffects';
 import { getTours, createBooking, login, register } from './services/api';
 import { useLanguage } from './context/LanguageContext';
 
@@ -289,7 +290,7 @@ function App() {
       localStorage.setItem(`bookings_${user.email}`, JSON.stringify(existingBookings));
 
       alert(
-        `✅ Booking confirmed!\nTour: ${bookingData.tour.name}\nName: ${bookingData.name}\nDate: ${bookingData.date}\nGuests: ${bookingData.guests}\nTotal: ${response.data.totalPrice}\n\nBooking ID: ${response.data._id}`
+        `📋 Booking Submitted!\n\nTour: ${bookingData.tour.name}\nName: ${bookingData.name}\nDate: ${bookingData.date}\nGuests: ${bookingData.guests}\nTotal: ${response.data.totalPrice}\n\nBooking ID: ${response.data._id}\n\n⏳ Status: PENDING\n\nYour booking is awaiting admin approval. You will receive an email confirmation once approved.`
       );
       setSelectedTour(null);
     } catch (err) {
@@ -348,6 +349,8 @@ function App() {
 
   return (
     <div className="App">
+      <BackgroundEffects />
+      
       <Navbar 
         user={user} 
         onLogout={handleLogout} 

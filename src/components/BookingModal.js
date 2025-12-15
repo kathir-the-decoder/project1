@@ -3,7 +3,7 @@ import './BookingModal.css';
 import { useLanguage } from '../context/LanguageContext';
 
 function BookingModal({ tour, onClose, onConfirm }) {
-  const { t, formatPrice } = useLanguage();
+  const { t, formatPrice, language } = useLanguage();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
@@ -90,8 +90,66 @@ function BookingModal({ tour, onClose, onConfirm }) {
     return total;
   }, [tour.price, formData.guests, customizations, addOns]);
 
+  const [guestError, setGuestError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+  const [emailError, setEmailError] = useState('');
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    
+    // Validate email
+    if (name === 'email') {
+      if (value && !validateEmail(value)) {
+        setEmailError('❌ Please enter a valid email address');
+      } else {
+        setEmailError('');
+      }
+    }
+    
+    // Validate guests
+    if (name === 'guests') {
+      const numGuests = parseInt(value) || 0;
+      if (numGuests > tour.maxGroupSize) {
+        setGuestError(`❌ Maximum ${tour.maxGroupSize} guests allowed for this tour`);
+      } else if (numGuests < 1) {
+        setGuestError('❌ At least 1 guest is required');
+      } else {
+        setGuestError('');
+      }
+    }
+    
+    // Validate phone (10 digits)
+    if (name === 'phone') {
+      const digitsOnly = value.replace(/\D/g, '');
+      if (value && digitsOnly.length < 10) {
+        setPhoneError('❌ Phone number must be at least 10 digits');
+      } else if (digitsOnly.length > 15) {
+        setPhoneError('❌ Phone number is too long');
+      } else {
+        setPhoneError('');
+      }
+    }
+    
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const isEmailValid = () => {
+    return formData.email && validateEmail(formData.email);
+  };
+
+  const isGuestValid = () => {
+    const numGuests = parseInt(formData.guests) || 0;
+    return numGuests >= 1 && numGuests <= tour.maxGroupSize;
+  };
+
+  const isPhoneValid = () => {
+    const digitsOnly = formData.phone.replace(/\D/g, '');
+    return digitsOnly.length >= 10 && digitsOnly.length <= 15;
   };
 
   const handleCustomizationChange = (key, value) => {
@@ -116,7 +174,7 @@ function BookingModal({ tour, onClose, onConfirm }) {
         <button className="close-btn" onClick={onClose}>×</button>
         
         <div className="modal-header">
-          <h2>🎫 {t('book') || 'Book'} {tour.name}</h2>
+          <h2>🎫 {t('book') || 'Book'} {(tour.translations && tour.translations[language] && tour.translations[language].name) || tour.name}</h2>
           <div className="booking-steps">
             <span className={`step ${step >= 1 ? 'active' : ''}`}>1. {t('details') || 'Details'}</span>
             <span className={`step ${step >= 2 ? 'active' : ''}`}>2. {t('customize') || 'Customize'}</span>
@@ -137,17 +195,36 @@ function BookingModal({ tour, onClose, onConfirm }) {
               <div className="form-row">
                 <div className="form-group">
                   <label>{t('fullName') || 'Full Name'} *</label>
-                  <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+                  <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Enter your full name" />
                 </div>
                 <div className="form-group">
                   <label>{t('email') || 'Email'} *</label>
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+                  <input 
+                    type="email" 
+                    name="email" 
+                    value={formData.email} 
+                    onChange={handleChange} 
+                    required 
+                    placeholder="e.g. name@example.com"
+                    className={emailError ? 'input-error' : ''}
+                  />
+                  {emailError && <span className="error-message">{emailError}</span>}
                 </div>
               </div>
               <div className="form-row">
                 <div className="form-group">
                   <label>{t('phone') || 'Phone'} *</label>
-                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
+                  <input 
+                    type="tel" 
+                    name="phone" 
+                    value={formData.phone} 
+                    onChange={handleChange} 
+                    required 
+                    placeholder="e.g. 9876543210"
+                    className={phoneError ? 'input-error' : ''}
+                  />
+                  <small>{t('phoneHint') || 'Enter 10-digit mobile number'}</small>
+                  {phoneError && <span className="error-message">{phoneError}</span>}
                 </div>
                 <div className="form-group">
                   <label>{t('tourDate') || 'Tour Date'} *</label>
@@ -157,12 +234,21 @@ function BookingModal({ tour, onClose, onConfirm }) {
               </div>
               <div className="form-group">
                 <label>{t('numberOfGuests') || 'Number of Guests'} *</label>
-                <input type="number" name="guests" min="1" max={tour.maxGroupSize} 
-                  value={formData.guests} onChange={handleChange} required />
-                <small>{t('maxGuests') || 'Max'}: {tour.maxGroupSize} {t('guests') || 'guests'}</small>
+                <input 
+                  type="number" 
+                  name="guests" 
+                  min="1" 
+                  max={tour.maxGroupSize} 
+                  value={formData.guests} 
+                  onChange={handleChange} 
+                  required 
+                  className={guestError ? 'input-error' : ''}
+                />
+                <small>{t('maxGuestsPerBooking') || 'Max Guests Per Booking'}: {tour.maxGroupSize} {t('guests') || 'guests'}</small>
+                {guestError && <span className="error-message">{guestError}</span>}
               </div>
               <button type="button" className="next-btn" onClick={() => setStep(2)}
-                disabled={!formData.name || !formData.email || !formData.phone || !formData.date}>
+                disabled={!formData.name || !formData.email || !formData.phone || !formData.date || !isGuestValid() || !isPhoneValid() || !isEmailValid()}>
                 {t('next') || 'Next'} →
               </button>
             </div>

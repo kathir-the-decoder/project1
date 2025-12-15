@@ -9,7 +9,13 @@ export const tours = [
     duration: '3 days',
     rating: 4.8,
     maxGroupSize: 15,
-    image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=500&h=300&fit=crop'
+    image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=500&h=300&fit=crop',
+    translations: {
+      hi: { name: 'पेरिस सिटी एक्सप्लोरर', location: 'पेरिस, फ्रांस', description: 'एफिल टॉवर, लौवर संग्रहालय और आकर्षक कैफे की यात्रा के साथ पेरिस के जादू की खोज करें।' },
+      ta: { name: 'பாரிஸ் நகர ஆய்வு', location: 'பாரிஸ், பிரான்ஸ்', description: 'ஈபிள் கோபுரம், லூவர் அருங்காட்சியகம் மற்றும் அழகான காபி கடைகளுக்கு விஜயம் செய்து பாரிஸின் மாயாஜாலத்தை கண்டறியுங்கள்.' },
+      es: { name: 'Explorador de París', location: 'París, Francia', description: 'Descubre la magia de París con visitas a la Torre Eiffel, el Museo del Louvre y encantadores cafés.' },
+      fr: { name: 'Explorateur de Paris', location: 'Paris, France', description: 'Découvrez la magie de Paris avec des visites à la Tour Eiffel, au Musée du Louvre et aux charmants cafés.' },
+    }
   },
   {
     id: 2,
@@ -20,7 +26,13 @@ export const tours = [
     duration: '4 days',
     rating: 4.8,
     maxGroupSize: 18,
-    image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=500&h=300&fit=crop'
+    image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=500&h=300&fit=crop',
+    translations: {
+      hi: { name: 'रोम ऐतिहासिक टूर', location: 'रोम, इटली', description: 'कोलोसियम, वेटिकन और रोमन फोरम में प्राचीन इतिहास की सैर करें।' },
+      ta: { name: 'ரோம் வரலாற்று சுற்றுலா', location: 'ரோம், இத்தாலி', description: 'கொலோசியம், வாடிகன் மற்றும் ரோமன் மன்றத்தில் பண்டைய வரலாற்றை நடந்து பாருங்கள்.' },
+      es: { name: 'Tour Histórico de Roma', location: 'Roma, Italia', description: 'Camina por la historia antigua en el Coliseo, el Vaticano y el Foro Romano.' },
+      fr: { name: 'Visite Historique de Rome', location: 'Rome, Italie', description: 'Parcourez l\'histoire ancienne au Colisée, au Vatican et au Forum Romain.' },
+    }
   },
   {
     id: 3,
@@ -31,7 +43,13 @@ export const tours = [
     duration: '4 days',
     rating: 4.7,
     maxGroupSize: 16,
-    image: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=500&h=300&fit=crop'
+    image: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=500&h=300&fit=crop',
+    translations: {
+      hi: { name: 'बार्सिलोना बीच और संस्कृति', location: 'बार्सिलोना, स्पेन', description: 'गौडी वास्तुकला, भूमध्यसागरीय समुद्र तट और जीवंत नाइटलाइफ का आनंद लें।' },
+      ta: { name: 'பார்சிலோனா கடற்கரை & கலாச்சாரம்', location: 'பார்சிலோனா, ஸ்பெயின்', description: 'கௌடி கட்டிடக்கலை, மத்தியதரைக் கடற்கரைகள் மற்றும் துடிப்பான இரவு வாழ்க்கையை அனுபவியுங்கள்.' },
+      es: { name: 'Barcelona Playa y Cultura', location: 'Barcelona, España', description: 'Disfruta de la arquitectura de Gaudí, playas mediterráneas y vibrante vida nocturna.' },
+      fr: { name: 'Barcelone Plage & Culture', location: 'Barcelone, Espagne', description: 'Profitez de l\'architecture de Gaudí, des plages méditerranéennes et de la vie nocturne animée.' },
+    }
   },
   {
     id: 4,
@@ -42,7 +60,13 @@ export const tours = [
     duration: '4 days',
     rating: 4.7,
     maxGroupSize: 20,
-    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=500&h=300&fit=crop'
+    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=500&h=300&fit=crop',
+    translations: {
+      hi: { name: 'लंदन रॉयल अनुभव', location: 'लंदन, यूके', description: 'बकिंघम पैलेस, बिग बेन, टॉवर ऑफ लंदन और ब्रिटिश म्यूजियम का अन्वेषण करें।' },
+      ta: { name: 'லண்டன் அரச அனுபவம்', location: 'லண்டன், இங்கிலாந்து', description: 'பக்கிங்ஹாம் அரண்மனை, பிக் பென், லண்டன் கோபுரம் மற்றும் பிரிட்டிஷ் அருங்காட்சியகத்தை ஆராயுங்கள்.' },
+      es: { name: 'Experiencia Real de Londres', location: 'Londres, Reino Unido', description: 'Explora el Palacio de Buckingham, Big Ben, la Torre de Londres y el Museo Británico.' },
+      fr: { name: 'Expérience Royale de Londres', location: 'Londres, Royaume-Uni', description: 'Explorez le Palais de Buckingham, Big Ben, la Tour de Londres et le British Museum.' },
+    }
   },
   {
     id: 5,

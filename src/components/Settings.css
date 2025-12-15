@@ -213,34 +213,61 @@
 
 /* Responsive */
 @media (max-width: 600px) {
-  .settings-modal {
-    max-height: 90vh;
-    border-radius: 15px;
+  .settings-overlay {
+    padding: 0.5rem;
+    align-items: flex-end;
   }
 
-  .settings-header,
-  .settings-content,
-  .settings-footer {
+  .settings-modal {
+    max-height: 85vh;
+    border-radius: 20px 20px 0 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .settings-header {
     padding: 1rem 1.25rem;
+  }
+
+  .settings-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .settings-content {
+    padding: 1rem;
+    max-height: calc(85vh - 150px);
+  }
+
+  .settings-section h3 {
+    font-size: 1rem;
   }
 
   .setting-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
+    padding: 0.6rem 0;
+  }
+
+  .setting-item label {
+    font-size: 0.9rem;
   }
 
   .setting-item select,
   .setting-item input[type="number"] {
     width: 100%;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
   }
 
   .setting-item.toggle {
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
   }
 
   .settings-footer {
+    padding: 1rem;
     flex-direction: column;
     gap: 0.75rem;
   }
@@ -248,5 +275,20 @@
   .reset-btn,
   .save-btn {
     width: 100%;
+    padding: 0.9rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .settings-modal {
+    max-height: 90vh;
+  }
+
+  .settings-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .settings-section h3 {
+    font-size: 0.95rem;
   }
 }

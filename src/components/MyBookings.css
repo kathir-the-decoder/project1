@@ -140,7 +140,8 @@
   font-weight: 600;
 }
 
-.booking-status.upcoming {
+.booking-status.upcoming,
+.booking-status.confirmed {
   background: rgba(78, 205, 196, 0.9);
   color: #fff;
 }
@@ -153,6 +154,47 @@
 .booking-status.completed {
   background: rgba(108, 117, 125, 0.9);
   color: #fff;
+}
+
+.booking-status.pending {
+  background: rgba(255, 193, 7, 0.9);
+  color: #000;
+}
+
+.booking-status.cancelled {
+  background: rgba(255, 107, 107, 0.9);
+  color: #fff;
+}
+
+.pending-note,
+.cancelled-note {
+  font-size: 0.8rem;
+  margin: 0.5rem 0 0;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.pending-note {
+  background: rgba(255, 193, 7, 0.15);
+  color: #ffc107;
+}
+
+.cancelled-note {
+  background: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
+}
+
+.booking-card.pending {
+  border-left: 3px solid #ffc107;
+}
+
+.booking-card.cancelled {
+  border-left: 3px solid #ff6b6b;
+  opacity: 0.7;
+}
+
+.booking-card.confirmed {
+  border-left: 3px solid #4ECDC4;
 }
 
 .booking-details {

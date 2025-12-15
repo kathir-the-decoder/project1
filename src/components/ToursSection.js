@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TourCard from './TourCard';
 import SearchBar from './SearchBar';
 import { useLanguage } from '../context/LanguageContext';
 
 function ToursSection({ filteredTours, allTours, onSearch, onFilter, onBook, onView }) {
   const { t } = useLanguage();
+  const [visibleCount, setVisibleCount] = useState(12);
+
+  const handleSeeMore = () => {
+    // Increase by 12 each click until all are visible
+    if (visibleCount >= filteredTours.length) {
+      setVisibleCount(12);
+    } else {
+      setVisibleCount((prev) => Math.min(prev + 12, filteredTours.length));
+    }
+  };
 
   const scrollToTour = (tour) => {
     const element = document.getElementById(`tour-${tour.id || tour._id}`);
@@ -34,8 +44,9 @@ function ToursSection({ filteredTours, allTours, onSearch, onFilter, onBook, onV
       />
 
       <main className="tours-container">
-          {filteredTours.length > 0 ? (
-          filteredTours.map((tour) => (
+        {filteredTours.length > 0 ? (
+          // show only a subset controlled by visibleCount
+          filteredTours.slice(0, visibleCount).map((tour) => (
             <TourCard key={tour._id || tour.id} tour={tour} onBook={onBook} onView={onView} id={`tour-${tour.id || tour._id}`} />
           ))
         ) : (
@@ -44,6 +55,15 @@ function ToursSection({ filteredTours, allTours, onSearch, onFilter, onBook, onV
           </div>
         )}
       </main>
+
+      {/* See more / See less */}
+      {filteredTours.length > 12 && (
+        <div className="see-more-container">
+          <button className="see-more-btn" onClick={handleSeeMore}>
+            {visibleCount >= filteredTours.length ? t('seeLess') : t('seeMore')}
+          </button>
+        </div>
+      )}
     </section>
   );
 }
