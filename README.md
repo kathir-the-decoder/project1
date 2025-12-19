@@ -1,11 +1,11 @@
-# Tour Booking Application
+Tour Booking Application
 
 Full-stack tour booking application with React frontend and Node.js/Express backend.
 
 ## Features
 
 - Browse and search tours
-- Filter by price, rating, duration
+- Filter by price, rating, duration.
 - Book tours with detailed form
 - User authentication
 - Admin panel for managing tours
